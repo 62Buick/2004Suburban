@@ -22,7 +22,6 @@ g++ -Wall -lpthread -o mowerpigpio mowerpigpio.cpp -lrt -std=c++17
 using namespace std;
 using namespace std::chrono;
 
-
 // connect to /dev/rfcomm0
 //open_port() - Opens serial port and returns file descriptor on success or -1 on error
 
@@ -65,14 +64,11 @@ int main(void){
   duration<double> time_mow = duration_cast<duration<double>>(time_current - time_last_mowing);
   duration<double> time_locate = duration_cast<duration<double>>(time_current - time_last_locate);
   selftest ();
-  while (time_span.count() < 20)
-  {
- 
-  }
+  while (time_span.count() < 20) {
+ 		cout << "Looping 20 times \n";
+	  }
   
-
-
-int sPort = -1;
+	int sPort = -1;
 	int written = 0;
 
 	sPort = open_port();
@@ -84,7 +80,7 @@ int sPort = -1;
 	sendThis = &something;
 
 	if (sPort != -1){
-		std::cout << "we're about to write";
+		cout << "we're about to write";
 
 		written = write(sPort, sendThis, 1);
 
@@ -95,7 +91,7 @@ int sPort = -1;
 			std::cout << "Failed to write to port \n";
 		};
 		
-		std::cout << written << " \n" << sendThis;
+		cout << written << " \n" << sendThis;
 		//READ stuff here.
 	};
 	
@@ -103,7 +99,6 @@ int sPort = -1;
 
 	return 0;
 };
-
 
 // read data
 
@@ -121,38 +116,3 @@ int sPort = -1;
     steady_clock::time_point time_last_picture;
     steady_clock::time_point time_last_mowing;
 
-// Initialize PIGPIO.
-
-// Takes a picture and texts it to the number in the .sh file.
-int pic01 (void)
-{
-	system ("bash ./Picture_with_email.sh");
-	return (0);
-}
-
-// Takes a picture and saves it.
-int pic02 (void)
-{
-	system ("bash ./Picture.sh");
-	return (0);
-}
-
-int selftest (void)
-{
-  return (0);
-}
-
-// Sets Steering Servo with the variable direction as the input.
-// Steering limits of the mechanics need to be expanded. Fixes needed.
-
-int steering (int azimuth)
-{
-    int c;
-    cout << "Steering Module " << azimuth << endl;
-    if (azimuth == 360) {c = 1500;}
-//  Switch the + and - after 1500 on the next 2 lines if the servo is mounted above the drive.
-    if (azimuth >= 0 && azimuth <= 60){c = 1500-azimuth*11;}
-    if (azimuth >=300 && azimuth <= 359) {c = 1500 + (360-azimuth)*11;}
-    if (azimuth > 60 && azimuth < 300) {c = 1500;direction = 0;}
-    return c;
-}

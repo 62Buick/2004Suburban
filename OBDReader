@@ -58,7 +58,21 @@ int open_port(void){
 };
 
 int main(void){
-	int sPort = -1;
+  time_boot = steady_clock::now();
+  time_current = steady_clock::now();
+  duration<double> time_span = duration_cast<duration<double>>(time_current - time_boot);
+  duration<double> time_picture = duration_cast<duration<double>>(time_current - time_last_picture);
+  duration<double> time_mow = duration_cast<duration<double>>(time_current - time_last_mowing);
+  duration<double> time_locate = duration_cast<duration<double>>(time_current - time_last_locate);
+  selftest ();
+  while (time_span.count() < 20)
+  {
+ 
+  }
+  
+
+
+int sPort = -1;
 	int written = 0;
 
 	sPort = open_port();
@@ -128,34 +142,6 @@ int selftest (void)
   return (0);
 }
 
-// Reads Sensors and Updates Controls
-int controlupdate (void)
-{
-        mower_on = 1;
-        move_on = 1;
-	forward_reverse = 1;
-        left_detect = gpioRead(16);
-        right_detect = gpioRead(20);  
-        rear_detect = gpioRead(21);  
-        front_detect = gpioRead(12);
-	cout << "Front Left Right Rear" << endl;
-	cout << front_detect << "     " << left_detect << "    " << right_detect << "     " << rear_detect << endl;
-        if(left_detect == 1) {mower_on = 0; direction = (direction + 10);}
-        if(right_detect == 1) {mower_on = 0; direction = (direction - 10);}
-        if(left_detect == 0 && right_detect == 0) {direction = 0;}
-        if(front_detect == 1) {mower_on = 0;forward_reverse = 0;direction = (direction - 10);} 
-        if(rear_detect == 1) {mower_on = 0;safety = 1;pic01 ();}
-        if(direction > 360) {direction = (direction - 360);}
-        if(direction < 0) {direction = (360 + direction);}
-        if(mower_on == 1) {gpioWrite (17, 1);}
-             else {gpioWrite (17, 0);}
-        if(move_on == 1) {gpioWrite (18, 1);}
-             else {gpioWrite (18, 0);}
-        if(forward_reverse == 1) {gpioWrite (27, 1);}
-             else {gpioWrite (27, 0);}
-	return 0;
-}
-
 // Sets Steering Servo with the variable direction as the input.
 // Steering limits of the mechanics need to be expanded. Fixes needed.
 
@@ -170,22 +156,3 @@ int steering (int azimuth)
     if (azimuth > 60 && azimuth < 300) {c = 1500;direction = 0;}
     return c;
 }
-
-int main (void)
-{
-  time_boot = steady_clock::now();
-  time_current = steady_clock::now();
-  duration<double> time_span = duration_cast<duration<double>>(time_current - time_boot);
-  duration<double> time_picture = duration_cast<duration<double>>(time_current - time_last_picture);
-  duration<double> time_mow = duration_cast<duration<double>>(time_current - time_last_mowing);
-  duration<double> time_locate = duration_cast<duration<double>>(time_current - time_last_locate);
-  selftest ();
-  while (time_span.count() < 20)
-  {
- 
-  }
-  
-// Close Serial Port
-
-return 0 ;
-}  
